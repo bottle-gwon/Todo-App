@@ -10,9 +10,12 @@ function App() {
 
   return (
     <>
-      <TodoList todoList={todoList} setTodoList={setTodoList} />
-      <hr />
-      <TodoInput todoList={todoList} setTodoList={setTodoList} />
+      <div className="app-container">
+        <h1>할일 목록</h1>
+        <TodoList todoList={todoList} setTodoList={setTodoList} />
+        <hr />
+        <TodoInput todoList={todoList} setTodoList={setTodoList} />
+      </div>
     </>
   );
 }
@@ -54,19 +57,17 @@ function Todo({ todo, setTodoList }) {
   const [inputValue, setInputValue] = useState("");
   const [stateClass, setClass] = useState("input_hide");
   return (
-    <li>
+    <li className="todo-list">
       <input type="checkbox" onChange={(e)=>
       {
         const check = structuredClone(todo);
         check.done = e.target.checked;
-        // console.log(check);
 
         setTodoList((prev)=>
          prev.map((el) =>
            el.id === todo.id ? check : el
           )
         );
-        console.log(todo.done);
       }
 
     }
@@ -79,10 +80,18 @@ function Todo({ todo, setTodoList }) {
         className= {stateClass}
         onChange={(event) => setInputValue(event.target.value)}
       />
+
+
       <button
+        id="adj"
         onClick={() => {
           if(stateClass === "input_hide"){
             setClass("input_show");
+            return;
+          }
+
+          if(inputValue ===''){
+            alert("빈문자열 입니다.")
             return;
           }
 
@@ -91,6 +100,8 @@ function Todo({ todo, setTodoList }) {
               el.id === todo.id ? { ...el, content: inputValue } : el
             )
           );
+          setInputValue('');
+
           setClass("input_hide")
         }}
       >
@@ -99,6 +110,7 @@ function Todo({ todo, setTodoList }) {
 
 
       <button
+        id="del"
         onClick={() => {
           setTodoList((prev) => {
             return prev.filter((el) => el.id !== todo.id);
